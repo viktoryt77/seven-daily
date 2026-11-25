@@ -3,7 +3,6 @@
 <head>
 <meta charset="utf-8">
 <meta name="color-scheme" content="dark">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
 <title>Seven Daily</title>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -86,6 +85,9 @@ header{display:flex;justify-content:space-between;align-items:baseline;font-size
 </div></div>
 
 <script>
+// The viewport tag is added here instead of in <head>: a static one can cause a
+// white flash when iOS starts a Home Screen app (known iOS issue).
+document.head.append(Object.assign(document.createElement("meta"), { name: "viewport", content: "width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no" }));
 (() => {
   const START = "2026-11-25", KEY = "seven-daily-v1", LS = localStorage;
   const CHECK = '<svg viewBox="0 0 16 16" fill="none"><path d="M3 8.5l3.2 3L13 4.5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
