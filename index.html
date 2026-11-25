@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="color-scheme" content="dark">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
 <title>Seven Daily</title>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -85,9 +86,18 @@ header{display:flex;justify-content:space-between;align-items:baseline;font-size
 </div></div>
 
 <script>
-// The viewport tag is added here instead of in <head>: a static one can cause a
-// white flash when iOS starts a Home Screen app (known iOS issue).
-document.head.append(Object.assign(document.createElement("meta"), { name: "viewport", content: "width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no" }));
+// Dark launch screen. iOS shows a launch image while a Home Screen app starts, and white
+// if none matches this exact screen. So, in Safari (where you tap "Add to Home Screen"),
+// draw a dark image the exact size of this phone's screen. iOS saves it when the app is added.
+if (navigator.standalone === false) {
+  const w = screen.width, h = screen.height, r = devicePixelRatio || 1, cv = document.createElement("canvas");
+  cv.width = Math.round(w * r); cv.height = Math.round(h * r);
+  const cx = cv.getContext("2d"); cx.fillStyle = "#0a0a0a"; cx.fillRect(0, 0, cv.width, cv.height);
+  document.head.append(Object.assign(document.createElement("link"), {
+    rel: "apple-touch-startup-image", href: cv.toDataURL("image/png"),
+    media: `(device-width: ${w}px) and (device-height: ${h}px) and (-webkit-device-pixel-ratio: ${r}) and (orientation: portrait)`
+  }));
+}
 (() => {
   const START = "2026-11-25", KEY = "seven-daily-v1", LS = localStorage;
   const CHECK = '<svg viewBox="0 0 16 16" fill="none"><path d="M3 8.5l3.2 3L13 4.5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
